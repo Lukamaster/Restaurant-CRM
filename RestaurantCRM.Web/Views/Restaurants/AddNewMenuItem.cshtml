@@ -1,0 +1,39 @@
+﻿@model RestaurantCRM.Domain.Entities.MenuItem
+
+@{
+    ViewData["Title"] = "AddNewMenuItem";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Add New Menu Item</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddNewMenuItem">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ListOfIngredients" class="control-label"></label>
+                <input asp-for="ListOfIngredients" class="form-control" />
+                <span asp-validation-for="ListOfIngredients" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Category" class="control-label"></label>
+                <input asp-for="Category" class="form-control" />
+                <span asp-validation-for="Category" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="AddNewMenuItem" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
