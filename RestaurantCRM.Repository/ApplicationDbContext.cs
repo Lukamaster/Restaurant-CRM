@@ -25,6 +25,16 @@ namespace RestaurantCRM.Repository
                 .HasForeignKey(menuitem => menuitem.RestaurantId)
                 .IsRequired();
             });
+
+            builder.Entity<MenuItem>(builder =>
+            {
+                builder.ToTable("MenuItem");
+                builder
+                .HasOne(e => e.Restaurant)
+                .WithMany(e => e.MenuItems)
+                .HasForeignKey(e => e.RestaurantId)
+                .IsRequired();
+            });
                 
         }
         

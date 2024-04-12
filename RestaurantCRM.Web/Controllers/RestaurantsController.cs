@@ -85,6 +85,7 @@ namespace RestaurantCRM.Web.Controllers
                     newItem.ListOfIngredients = menuItemDTO.ListOfIngredients;
                     newItem.Price = menuItemDTO.Price;
                     newItem.Category = menuItemDTO.Category;
+                    newItem.Restaurant = _restaurantService.GetById(id);
                     newItem.RestaurantId = id;
                     _menuItemService.Create(newItem);
                     _restaurantService.AddNewItem(id, newItem);
@@ -100,7 +101,49 @@ namespace RestaurantCRM.Web.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", new {id = id});
+            }
+            return View();
+        }
+
+        
+        public IActionResult ItemEdit(Guid? id)
+        {
+            if(id == null)
+            {
+                return NotFound();
+            }
+            var item = _menuItemService.GetMenuItemById((Guid)id);
+            return View(item);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ItemEdit(Guid id, [Bind("Id,Name,ListOfIngredients,Price,Category,RestaurantId")] MenuItem menuItem)
+        {
+
+            if (id != menuItem.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _menuItemService.Update(menuItem);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (_menuItemService.GetMenuItemById(id) == null)
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction("Details", new { id = _menuItemService.GetMenuItemById(id).RestaurantId });
             }
             return View();
         }

@@ -29,7 +29,7 @@ namespace RestaurantCRM.Service.Implementation
 
         public MenuItem GetMenuItemById(Guid id)
         {
-            throw new NotImplementedException();
+            return _repository.GetById(id);
         }
 
         public List<MenuItem> GetMenuItems(Guid? id)
@@ -39,7 +39,7 @@ namespace RestaurantCRM.Service.Implementation
 
         public void Update(MenuItem menuItem)
         {
-            throw new NotImplementedException();
+            _repository.Update(menuItem);
         }
     }
 }
