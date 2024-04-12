@@ -147,6 +147,28 @@ namespace RestaurantCRM.Web.Controllers
             }
             return View();
         }
+
+        public IActionResult ItemDelete(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var item = _menuItemService.GetMenuItemById((Guid)id);
+            return View(item);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ItemDelete(Guid id)
+        {
+            var item = _menuItemService.GetMenuItemById(id);
+            if (item != null)
+            {
+                _menuItemService.Delete(item);
+            }
+            return RedirectToAction(nameof(Index));
+
+        }
         
 
         // GET: Restaurants/Edit/5

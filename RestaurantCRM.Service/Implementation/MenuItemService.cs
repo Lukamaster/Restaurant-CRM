@@ -24,7 +24,7 @@ namespace RestaurantCRM.Service.Implementation
 
         public void Delete(MenuItem menuItem)
         {
-            throw new NotImplementedException();
+            _repository.Delete(menuItem);
         }
 
         public MenuItem GetMenuItemById(Guid id)
