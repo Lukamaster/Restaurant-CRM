@@ -26,15 +26,31 @@ namespace RestaurantCRM.Repository
                 .IsRequired();
             });
 
-            builder.Entity<MenuItem>(builder =>
+            builder.Entity<MenuItemInOrder>(builder =>
             {
-                builder.ToTable("MenuItem");
                 builder
-                .HasOne(e => e.Restaurant)
-                .WithMany(e => e.MenuItems)
-                .HasForeignKey(e => e.RestaurantId)
-                .IsRequired();
+                .HasOne(e => e.Order)
+                .WithMany(a => a.ItemsOrdered)
+                .HasForeignKey(e => e.OrderId);
             });
+
+            //builder.Entity<MenuItem>(builder =>
+            //{
+            //    builder.ToTable("MenuItem");
+            //    builder
+            //    .HasOne(e => e.Restaurant)
+            //    .WithMany(e => e.MenuItems)
+            //    .HasForeignKey(e => e.RestaurantId)
+            //    .IsRequired();
+            //});
+
+            //builder.Entity<Order>(builder =>
+            //{
+            //    builder.ToTable("Order");
+            //    builder
+            //    .HasMany(order => )
+            //    .WithOne(order => order.Restaurant)
+            //})
                 
         }
         
