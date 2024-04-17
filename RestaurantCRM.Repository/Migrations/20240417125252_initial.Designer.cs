@@ -12,8 +12,8 @@ using RestaurantCRM.Repository;
 namespace RestaurantCRM.Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240411051054_migration2")]
-    partial class migration2
+    [Migration("20240417125252_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -245,6 +245,9 @@ namespace RestaurantCRM.Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
@@ -253,9 +256,40 @@ namespace RestaurantCRM.Repository.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("OrderId");
+
                     b.HasIndex("RestaurantId");
 
-                    b.ToTable("MenuItem");
+                    b.ToTable("MenuItem", (string)null);
+                });
+
+            modelBuilder.Entity("RestaurantCRM.Domain.Entities.Order", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("OrderDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("RestaurantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TableNumber")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RestaurantId");
+
+                    b.ToTable("Order", (string)null);
                 });
 
             modelBuilder.Entity("RestaurantCRM.Domain.Entities.Restaurant", b =>
@@ -286,7 +320,7 @@ namespace RestaurantCRM.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Restaurant");
+                    b.ToTable("Restaurant", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -342,6 +376,10 @@ namespace RestaurantCRM.Repository.Migrations
 
             modelBuilder.Entity("RestaurantCRM.Domain.Entities.MenuItem", b =>
                 {
+                    b.HasOne("RestaurantCRM.Domain.Entities.Order", null)
+                        .WithMany("ItemsOrdered")
+                        .HasForeignKey("OrderId");
+
                     b.HasOne("RestaurantCRM.Domain.Entities.Restaurant", "Restaurant")
                         .WithMany("MenuItems")
                         .HasForeignKey("RestaurantId")
@@ -349,6 +387,22 @@ namespace RestaurantCRM.Repository.Migrations
                         .IsRequired();
 
                     b.Navigation("Restaurant");
+                });
+
+            modelBuilder.Entity("RestaurantCRM.Domain.Entities.Order", b =>
+                {
+                    b.HasOne("RestaurantCRM.Domain.Entities.Restaurant", "Restaurant")
+                        .WithMany()
+                        .HasForeignKey("RestaurantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Restaurant");
+                });
+
+            modelBuilder.Entity("RestaurantCRM.Domain.Entities.Order", b =>
+                {
+                    b.Navigation("ItemsOrdered");
                 });
 
             modelBuilder.Entity("RestaurantCRM.Domain.Entities.Restaurant", b =>

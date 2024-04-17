@@ -12,6 +12,7 @@ namespace RestaurantCRM.Repository
         }
         public virtual DbSet<Restaurant> Restaurant { get; set; } = default!;
         public virtual DbSet<MenuItem> MenuItem { get; set; } = default!;
+        public virtual DbSet<Order> Order { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -26,23 +27,22 @@ namespace RestaurantCRM.Repository
                 .IsRequired();
             });
 
-            builder.Entity<MenuItemInOrder>(builder =>
+            builder.Entity<Order>(builder =>
             {
+                builder.ToTable("Order");
                 builder
-                .HasOne(e => e.Order)
-                .WithMany(a => a.ItemsOrdered)
-                .HasForeignKey(e => e.OrderId);
+                .HasMany(a => a.ItemsOrdered);
             });
 
-            //builder.Entity<MenuItem>(builder =>
-            //{
-            //    builder.ToTable("MenuItem");
-            //    builder
-            //    .HasOne(e => e.Restaurant)
-            //    .WithMany(e => e.MenuItems)
-            //    .HasForeignKey(e => e.RestaurantId)
-            //    .IsRequired();
-            //});
+            builder.Entity<MenuItem>(builder =>
+            {
+                builder.ToTable("MenuItem");
+                builder
+                .HasOne(e => e.Restaurant)
+                .WithMany(e => e.MenuItems)
+                .HasForeignKey(e => e.RestaurantId)
+                .IsRequired();
+            });
 
             //builder.Entity<Order>(builder =>
             //{
@@ -51,7 +51,7 @@ namespace RestaurantCRM.Repository
             //    .HasMany(order => )
             //    .WithOne(order => order.Restaurant)
             //})
-                
+
         }
         
     }
